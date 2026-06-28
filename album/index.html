@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endrey & Jéssica - Casamento Civil</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #efe1cf;
+            color: #3b2f2f;
+            overflow-x: hidden;
+        }
+
+        .capa {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.65)),
+                url('fotos/1.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 25px;
+        }
+
+        .capa h1 {
+            font-size: clamp(48px, 10vw, 110px);
+            font-weight: normal;
+        }
+
+        .capa p {
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .botao {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 38px;
+            border-radius: 40px;
+            border: 1px solid white;
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,.14);
+            backdrop-filter: blur(6px);
+        }
+
+        .area-album {
+            min-height: 100vh;
+            padding: 45px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .titulo h2 {
+            font-size: clamp(32px, 6vw, 58px);
+            font-weight: normal;
+        }
+
+        .livro {
+            width: min(1150px, 96vw);
+            min-height: 650px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #d2b48c;
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 35px 90px rgba(0,0,0,.35);
+            position: relative;
+            perspective: 1600px;
+        }
+
+        .livro::before {
+            content: "";
+            position: absolute;
+            top: 18px;
+            bottom: 18px;
+            left: 50%;
+            width: 18px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, rgba(0,0,0,.22), rgba(255,255,255,.25), rgba(0,0,0,.22));
+            border-radius: 20px;
+            z-index: 5;
+        }
+
+        .pagina {
+            background: #fffaf1;
+            padding: 28px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            align-content: center;
+            position: relative;
+            transition: transform .6s ease, opacity .4s ease;
+        }
+
+        .pagina.esquerda {
+            border-radius: 20px 4px 4px 20px;
+            box-shadow: inset -18px 0 30px rgba(0,0,0,.08);
+        }
+
+        .pagina.direita {
+            border-radius: 4px 20px 20px 4px;
+            box-shadow: inset 18px 0 30px rgba(0,0,0,.08);
+        }
+
+        .pagina.virando-direita {
+            animation: virarDireita .55s ease;
+        }
+
+        .pagina.virando-esquerda {
+            animation: virarEsquerda .55s ease;
+        }
+
+        @keyframes virarDireita {
+            0% { transform: rotateY(0deg); opacity: 1; }
+            50% { transform: rotateY(-18deg); opacity: .55; }
+            100% { transform: rotateY(0deg); opacity: 1; }
+        }
+
+        @keyframes virarEsquerda {
+            0% { transform: rotateY(0deg); opacity: 1; }
+            50% { transform: rotateY(18deg); opacity: .55; }
+            100% { transform: rotateY(0deg); opacity: 1; }
+        }
+
+        .foto {
+            background: white;
+            padding: 9px;
+            border-radius: 12px;
+            box-shadow: 0 10px 24px rgba(0,0,0,.18);
+            cursor: pointer;
+            transform: rotate(var(--rotacao));
+            transition: transform .25s ease;
+        }
+
+        .foto:hover {
+            transform: scale(1.04) rotate(0deg);
+        }
+
+        .foto img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .controles {
+            margin-top: 28px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 13px 28px;
+            border-radius: 40px;
+            border: none;
+            background: #7a5527;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:disabled {
+            opacity: .35;
+            cursor: default;
+        }
+
+        .info {
+            color: #5f4937;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20,15,12,.94);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lightbox.ativo { display: flex; }
+
+        .lightbox img {
+            max-width: 95vw;
+            max-height: 88vh;
+            border-radius: 20px;
+            border: 8px solid white;
+        }
+
+        .fechar {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 45px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 35px;
+            background: #d9c09d;
+        }
+
+        @media (max-width: 850px) {
+            .livro {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .livro::before { display: none; }
+
+            .pagina {
+                grid-template-columns: 1fr 1fr;
+                border-radius: 18px !important;
+                margin-bottom: 16px;
+                padding: 18px;
+            }
+
+            .foto img {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="capa">
+        <div>
+            <p>Álbum de casamento civil</p>
+            <h1>Endrey & Jéssica</h1>
+            <span>182 lembranças guardadas com carinho</span>
+            <br>
+            <a class="botao" href="#album">Abrir álbum</a>
+        </div>
+    </section>
+
+    <section class="area-album" id="album">
+        <div class="titulo">
+            <h2>Nosso álbum</h2>
+            <p>Clique nas fotos para ampliar.</p>
+        </div>
+
+        <div class="livro">
+            <div class="pagina esquerda" id="paginaEsquerda"></div>
+            <div class="pagina direita" id="paginaDireita"></div>
+        </div>
+
+        <div class="controles">
+            <button id="anterior" onclick="paginaAnterior()">← Página anterior</button>
+            <span class="info" id="infoPagina"></span>
+            <button id="proxima" onclick="proximaPagina()">Próxima página →</button>
+        </div>
+    </section>
+
+    <div class="lightbox" id="lightbox" onclick="fecharFoto()">
+        <span class="fechar">&times;</span>
+        <img id="fotoGrande" src="">
+    </div>
+
+    <footer>
+        <p>Com amor, respeito e gratidão.</p>
+        <p>Endrey & Jéssica</p>
+    </footer>
+
+    <script>
+        const fotos = ['fotos/1.jpg','fotos/2.jpg','fotos/3.jpg','fotos/4.jpg','fotos/5.jpg','fotos/6.jpg','fotos/7.jpg','fotos/8.jpg','fotos/9.jpg','fotos/10.jpg','fotos/11.jpg','fotos/12.jpg','fotos/13.jpg','fotos/14.jpg','fotos/15.jpg','fotos/16.jpg','fotos/17.jpg','fotos/18.jpg','fotos/19.jpg','fotos/20.jpg','fotos/21.jpg','fotos/22.jpg','fotos/23.jpg','fotos/24.jpg','fotos/25.jpg','fotos/26.jpg','fotos/27.jpg','fotos/28.jpg','fotos/29.jpg','fotos/30.jpg','fotos/31.jpg','fotos/32.jpg','fotos/33.jpg','fotos/34.jpg','fotos/35.jpg','fotos/36.jpg','fotos/37.jpg','fotos/38.jpg','fotos/39.jpg','fotos/40.jpg','fotos/41.jpg','fotos/42.jpg','fotos/43.jpg','fotos/44.jpg','fotos/45.jpg','fotos/46.jpg','fotos/47.jpg','fotos/48.jpg','fotos/49.jpg','fotos/50.jpg','fotos/51.jpg','fotos/52.jpg','fotos/53.jpg','fotos/54.jpg','fotos/55.jpg','fotos/56.jpg','fotos/57.jpg','fotos/58.jpg','fotos/59.jpg','fotos/60.jpg','fotos/61.jpg','fotos/62.jpg','fotos/63.jpg','fotos/64.jpg','fotos/65.jpg','fotos/66.jpg','fotos/67.jpg','fotos/68.jpg','fotos/69.jpg','fotos/70.jpg','fotos/71.jpg','fotos/72.jpg','fotos/73.jpg','fotos/74.jpg','fotos/75.jpg','fotos/76.jpg','fotos/77.jpg','fotos/78.jpg','fotos/79.jpg','fotos/80.jpg','fotos/81.jpg','fotos/82.jpg','fotos/83.jpg','fotos/84.jpg','fotos/85.jpg','fotos/86.jpg','fotos/87.jpg','fotos/88.jpg','fotos/89.jpg','fotos/90.jpg','fotos/91.jpg','fotos/92.jpg','fotos/93.jpg','fotos/94.jpg','fotos/95.jpg','fotos/96.jpg','fotos/97.jpg','fotos/98.jpg','fotos/99.jpg','fotos/100.jpg','fotos/101.jpg','fotos/102.jpg','fotos/103.jpg','fotos/104.jpg','fotos/105.jpg','fotos/106.jpg','fotos/107.jpg','fotos/108.jpg','fotos/109.jpg','fotos/110.jpg','fotos/111.jpg','fotos/112.jpg','fotos/113.jpg','fotos/114.jpg','fotos/115.jpg','fotos/116.jpg','fotos/117.jpg','fotos/118.jpg','fotos/119.jpg','fotos/120.jpg','fotos/121.jpg','fotos/122.jpg','fotos/123.jpg','fotos/124.jpg','fotos/125.jpg','fotos/126.jpg','fotos/127.jpg','fotos/128.jpg','fotos/129.jpg','fotos/130.jpg','fotos/131.jpg','fotos/132.jpg','fotos/133.jpg','fotos/134.jpg','fotos/135.jpg','fotos/136.jpg','fotos/137.jpg','fotos/138.jpg','fotos/139.jpg','fotos/140.jpg','fotos/141.jpg','fotos/142.jpg','fotos/143.jpg','fotos/144.jpg','fotos/145.jpg','fotos/146.jpg','fotos/147.jpg','fotos/148.jpg','fotos/149.jpg','fotos/150.jpg','fotos/151.jpg','fotos/152.jpg','fotos/153.jpg','fotos/154.jpg','fotos/155.jpg','fotos/156.jpg','fotos/157.jpg','fotos/158.jpg','fotos/159.jpg','fotos/160.jpg','fotos/161.jpg','fotos/162.jpg','fotos/163.jpg','fotos/164.jpg','fotos/165.jpg','fotos/166.jpg','fotos/167.jpg','fotos/168.jpg','fotos/169.jpg','fotos/170.jpg','fotos/171.jpg','fotos/172.jpg','fotos/173.jpg','fotos/174.jpg','fotos/175.jpg','fotos/176.jpg','fotos/177.jpg','fotos/178.jpg','fotos/179.jpg','fotos/180.jpg','fotos/181.jpg','fotos/182.jpg',];
+
+        const fotosPorAbertura = 8;
+        let aberturaAtual = 0;
+
+        function criarFoto(caminho, index) {
+            const rotacoes = ['-1.5deg', '1deg', '-.8deg', '1.4deg'];
+            return `
+                <div class="foto" style="--rotacao:${rotacoes[index % rotacoes.length]}" onclick="abrirFoto('${caminho}')">
+                    <img src="${caminho}" loading="lazy">
+                </div>
+            `;
+        }
+
+        function mostrarAbertura(direcao = 'direita') {
+            const inicio = aberturaAtual * fotosPorAbertura;
+            const fotosAbertura = fotos.slice(inicio, inicio + fotosPorAbertura);
+
+            const esquerda = fotosAbertura.slice(0, 4);
+            const direita = fotosAbertura.slice(4, 8);
+
+            const paginaEsquerda = document.getElementById('paginaEsquerda');
+            const paginaDireita = document.getElementById('paginaDireita');
+
+            paginaEsquerda.classList.remove('virando-esquerda', 'virando-direita');
+            paginaDireita.classList.remove('virando-esquerda', 'virando-direita');
+
+            void paginaEsquerda.offsetWidth;
+
+            paginaEsquerda.innerHTML = esquerda.map(criarFoto).join('');
+            paginaDireita.innerHTML = direita.map(criarFoto).join('');
+
+            if (direcao === 'direita') {
+                paginaDireita.classList.add('virando-direita');
+            } else {
+                paginaEsquerda.classList.add('virando-esquerda');
+            }
+
+            const totalAberturas = Math.ceil(fotos.length / fotosPorAbertura);
+
+            document.getElementById('infoPagina').textContent =
+                `Abertura ${aberturaAtual + 1} de ${totalAberturas}`;
+
+            document.getElementById('anterior').disabled = aberturaAtual === 0;
+            document.getElementById('proxima').disabled = aberturaAtual === totalAberturas - 1;
+        }
+
+        function proximaPagina() {
+            const totalAberturas = Math.ceil(fotos.length / fotosPorAbertura);
+            if (aberturaAtual < totalAberturas - 1) {
+                aberturaAtual++;
+                mostrarAbertura('direita');
+            }
+        }
+
+        function paginaAnterior() {
+            if (aberturaAtual > 0) {
+                aberturaAtual--;
+                mostrarAbertura('esquerda');
+            }
+        }
+
+        function abrirFoto(caminho) {
+            document.getElementById('fotoGrande').src = caminho;
+            document.getElementById('lightbox').classList.add('ativo');
+        }
+
+        function fecharFoto() {
+            document.getElementById('lightbox').classList.remove('ativo');
+        }
+
+        mostrarAbertura();
+    </script>
+</body>
+</html>
